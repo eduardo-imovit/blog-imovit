@@ -32,11 +32,30 @@ export interface Post {
   emoji: string;
 }
 
+// Interface de uso estritamente interno
+interface BlogPostRow {
+  id: string;
+  slug: string;
+  titulo: string;
+  tema: string;
+  angulo?: string | null;
+  publico?: string | null;
+  conteudo_html: string;
+  email_copy?: string | null;
+  email_assunto?: string | null;
+  status: string;
+  view_count: number;
+  data_geracao: string;
+  semana_iso?: string | null;
+  link_drive_artigo?: string | null;
+  link_drive_email?: string | null;
+}
+
 // Dados simulados (Mock) baseados em temas de conteúdo e cores do Design System
 export const mockPosts: Post[] = [
   {
     id: '1',
-    title: 'O Charme de Morar no Alphaville Dom Pedro: Infraestrutura e Natureza em Campinas',
+    title: 'O Charme de Morar no Alphaville Dom Pedro: Infraestrutura e Natureza in Campinas',
     slug: 'charme-morar-alphaville-dom-pedro',
     excerpt: 'Descubra como a curadoria boutique seleciona residências que integram sofisticação urbana, segurança de alto nível e contato direto com a natureza no Alphaville Dom Pedro.',
     content: `
@@ -45,7 +64,7 @@ export const mockPosts: Post[] = [
 <blockquote>"Respire silêncio. Um lar perfeito é aquele que preserva sua paz interior no ritmo dinâmico da cidade."</blockquote>
 
 <h2>Estilo de vida integrado ao entorno</h2>
-<p>Em nossa curadoria na Imovit, observamos que morar nesta região oferece uma verdadeira extensão de lazer. A presença de clubes privativos de alto padrão com quadras de tênis, piscinas e bosques nativos cria um ecossistema único de convívio social e contato com o meio ambiente.</p>
+<p>Em nossa curadoria na Imovit, observamos que morar nesta região oferece uma verdadeira extensão de lazer. A presença de clubes privativos de alto padrão com quadras de tennis, piscinas e bosques nativos cria um ecossistema único de convívio social e contato com o meio ambiente.</p>
 
 <p>Casas com amplos vãos de vidro, projetos arquitetônicos integrados e segurança fortificada 24 horas são marcas registradas das propriedades selecionadas para nosso portfólio no Alphaville Dom Pedro.</p>
 
@@ -97,7 +116,7 @@ export const mockPosts: Post[] = [
     slug: 'mapeamento-mercado-alto-padrao-campinas',
     excerpt: 'Análise de valorização, rentabilidade e liquidez de lajes comerciais e imóveis residenciais de alto padrão nas regiões mais valorizadas de Campinas.',
     content: `
-<p>Investir no mercado de alto padrão em Campinas requer uma visão estratégica focada em dados e na solidez de bons ativos imobiliários. Historicamente, o segmento boutique apresenta resiliência em momentos de oscilação econômica.</p>
+<p>Investir no mercado de alto padrão in Campinas requer uma visão estratégica focada em dados e na solidez de bons ativos imobiliários. Historicamente, o segmento boutique apresenta resiliência em momentos de oscilação econômica.</p>
 
 <blockquote>"Amor concreto. A solidez de um bom tijolo aliada à inteligência de dados gera o investimento que se perpetua."</blockquote>
 
@@ -166,17 +185,134 @@ export const mockPosts: Post[] = [
   }
 ];
 
+// Função adaptadora para transformar BlogPostRow em Post
+function adaptBlogPost(row: BlogPostRow): Post {
+  // 1. Mapeamento direto
+  const id = row.id;
+  const title = row.titulo;
+  const slug = row.slug;
+  const content = row.conteudo_html;
+
+  // 2. tema -> theme (Fuzzy match case-insensitive por substring)
+  const temaLower = (row.tema || '').toLowerCase();
+  let theme: 'arquitetura' | 'bairros' | 'mercado' | 'lifestyle';
+
+  if (temaLower.includes('arquitetura') || temaLower.includes('design') || temaLower.includes('interior')) {
+    theme = 'arquitetura';
+  } else if (temaLower.includes('bairro') || temaLower.includes('localiza') || temaLower.includes('região') || temaLower.includes('regiao')) {
+    theme = 'bairros';
+  } else if (temaLower.includes('lifestyle') || temaLower.includes('estilo') || temaLower.includes('vida')) {
+    theme = 'lifestyle';
+  } else {
+    theme = 'mercado'; // fallback/default
+  }
+
+  // 3. themeLabel derivado do theme
+  const themeLabelMap = {
+    arquitetura: 'Arquitetura & Design',
+    bairros: 'Bairros Nobres',
+    mercado: 'Mercado & Tendências',
+    lifestyle: 'Estilo de Vida'
+  };
+  const themeLabel = themeLabelMap[theme];
+
+  // 4. gradient por theme
+  const gradientMap = {
+    arquitetura: 'linear-gradient(135deg, #e8c4c4, #d18a8a)',
+    bairros: 'linear-gradient(135deg, #e3c4b8, #d4755a)',
+    mercado: 'linear-gradient(135deg, #2B4A6B, #1a3552)',
+    lifestyle: 'linear-gradient(135deg, #ede2cd, #c9a96e)'
+  };
+  const gradient = gradientMap[theme];
+
+  // 5. emoji por theme
+  const emojiMap = {
+    arquitetura: '🏛️',
+    bairros: '🧭',
+    mercado: '📈',
+    lifestyle: '✨'
+  };
+  const emoji = emojiMap[theme];
+
+  // 6. poeticPhrase (row.angulo se <= 80 chars, senão fallback por theme)
+  let poeticPhrase = '';
+  if (row.angulo && row.angulo.trim().length <= 80) {
+    poeticPhrase = row.angulo.trim();
+  } else {
+    const poeticFallbackMap = {
+      arquitetura: 'Design com alma.',
+      bairros: 'Onde a vida acontece.',
+      mercado: 'Estratégia com significado.',
+      lifestyle: 'O luxo do essencial.'
+    };
+    poeticPhrase = poeticFallbackMap[theme];
+  }
+
+  // 7. excerpt: primeiros 180 chars do conteudo_html sem tags, normalizando whitespace
+  const rawText = (content || '').replace(/<\/?[^>]+(>|$)/g, '');
+  const cleanText = rawText.replace(/\s+/g, ' ').trim();
+  const excerpt = cleanText.length > 180 ? cleanText.substring(0, 180) + '...' : cleanText;
+
+  // 8. readingTime: baseado em 200 palavras/minuto, mínimo 1 min
+  const words = cleanText ? cleanText.split(/\s+/).length : 0;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  const readingTime = `${minutes} min de leitura`;
+
+  // 9. date: formatar data_geracao (ISO) para pt-BR
+  let date = '';
+  try {
+    const parsedDate = new Date(row.data_geracao);
+    if (!isNaN(parsedDate.getTime())) {
+      date = new Intl.DateTimeFormat('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      }).format(parsedDate);
+    } else {
+      date = row.data_geracao;
+    }
+  } catch (e) {
+    date = row.data_geracao;
+  }
+
+  // 10. bairro (hardcoded "Campinas")
+  const bairro = 'Campinas';
+
+  // 11. author (hardcoded "Curadoria Imovit")
+  const author = 'Curadoria Imovit';
+
+  return {
+    id,
+    title,
+    slug,
+    excerpt,
+    content,
+    theme,
+    themeLabel,
+    poeticPhrase,
+    bairro,
+    author,
+    date,
+    readingTime,
+    gradient,
+    emoji
+  };
+}
+
 // Funções para busca de posts (Supabase com fallback para Mock)
 export async function getPosts(): Promise<Post[]> {
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
-        .from('posts')
+        .from('blog_posts')
         .select('*')
-        .order('date', { ascending: false });
+        .eq('status', 'publicado')
+        .order('data_geracao', { ascending: false });
 
       if (error) throw error;
-      if (data && data.length > 0) return data as Post[];
+      if (data && data.length > 0) {
+        return (data as BlogPostRow[]).map(adaptBlogPost);
+      }
     } catch (e) {
       console.warn('Erro ao buscar posts do Supabase, utilizando mock data:', e);
     }
@@ -190,13 +326,16 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
-        .from('posts')
+        .from('blog_posts')
         .select('*')
         .eq('slug', slug)
-        .single();
+        .eq('status', 'publicado')
+        .maybeSingle();
 
       if (error) throw error;
-      if (data) return data as Post;
+      if (data) {
+        return adaptBlogPost(data as BlogPostRow);
+      }
     } catch (e) {
       console.warn(`Erro ao buscar post por slug (${slug}) no Supabase, utilizando mock data:`, e);
     }
