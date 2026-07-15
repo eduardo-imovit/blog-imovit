@@ -74,8 +74,8 @@ export default async function PostPage({ params }: PageProps) {
       </header>
 
       {/* Banner Poético do Artigo */}
-      <div 
-        style={{ 
+      <div
+        style={{
           background: post.gradient,
           height: '320px',
           borderRadius: 'var(--radius-lg)',
@@ -84,49 +84,49 @@ export default async function PostPage({ params }: PageProps) {
           marginBottom: 'var(--space-6)'
         }}
       >
-        <div 
-          style={{ 
-            width: '100%', 
-            height: '100%', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            opacity: 0.35, 
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.35,
             fontSize: '96px',
             userSelect: 'none'
           }}
         >
           {post.emoji}
         </div>
-        <div 
-          style={{ 
-            position: 'absolute', 
-            bottom: 0, 
-            left: 0, 
-            right: 0, 
-            padding: 'var(--space-5)', 
-            background: 'linear-gradient(to top, rgba(45, 45, 45, 0.8) 0%, transparent 100%)' 
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            padding: 'var(--space-5)',
+            background: 'linear-gradient(to top, rgba(45, 45, 45, 0.8) 0%, transparent 100%)'
           }}
         >
           <div className="card-img-phrase" style={{ fontSize: 'var(--text-xl)' }}>
-            "{post.poeticPhrase}"
+            &ldquo;{post.poeticPhrase}&rdquo;
           </div>
         </div>
       </div>
 
       {/* Barra de Segmento */}
-      <div 
-        style={{ 
-          height: '4px', 
-          backgroundColor: getSegmentColor(post.theme, post.emoji), 
-          marginTop: '-24px', 
+      <div
+        style={{
+          height: '4px',
+          backgroundColor: getSegmentColor(post.theme, post.emoji),
+          marginTop: '-24px',
           marginBottom: 'var(--space-6)',
-          borderRadius: '0 0 var(--radius-lg) var(--radius-lg)' 
-        }} 
+          borderRadius: '0 0 var(--radius-lg) var(--radius-lg)'
+        }}
       />
 
       {/* Conteúdo do Artigo */}
-      <div 
+      <div
         className="article-content"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
@@ -138,7 +138,7 @@ export default async function PostPage({ params }: PageProps) {
           Na Imovit, ajudamos você a encontrar lares com a sua alma. Fale com um de nossos curadores especialistas no WhatsApp e compartilhe seu projeto de vida.
         </p>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a 
+          <a
             href={`https://wa.me/5519999999999?text=Olá,%20li%20o%20artigo%20"${encodeURIComponent(post.title)}"%20e%20gostaria%20de%20falar%20com%20um%20curador.`}
             target="_blank"
             rel="noopener noreferrer"
