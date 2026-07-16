@@ -1,6 +1,9 @@
 import { getPosts } from '@/lib/supabase';
 import HomeFeed from '@/components/HomeFeed';
 
+// Força a página a rebuscar posts a cada request (sem cache)
+export const revalidate = 0;
+
 export default async function Home() {
   const posts = await getPosts();
 
