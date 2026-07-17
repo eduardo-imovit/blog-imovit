@@ -75,8 +75,8 @@ export default async function PostPage({ params }: PageProps) {
               Na Imovit, ajudamos você a encontrar lares com a sua alma. Fale com um de nossos curadores especialistas.
             </p>
             <div className="post-cta-actions">
-              
-                href={`https://wa.me/5519999999999?text=Olá,%20li%20o%20artigo%20"${encodeURIComponent(post.title)}"%20e%20gostaria%20de%20falar%20com%20um%20curador.`}
+
+              <a href={`https://wa.me/5519999999999?text=Olá,%20li%20o%20artigo%20"${encodeURIComponent(post.title)}"%20e%20gostaria%20de%20falar%20com%20um%20curador.`}
                 target="_blank" rel="noopener noreferrer" className="btn btn-primary"
               >Falar no WhatsApp</a>
               <Link href="/" className="btn btn-secondary">Voltar para a Home</Link>
