@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getPostBySlug } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import TocNav from '@/components/TocNav';
+import { MessageCircle, Linkedin, Facebook } from 'lucide-react';
 
 export const revalidate = 0;
 
@@ -76,7 +77,7 @@ export default async function PostPage({ params }: PageProps) {
             </p>
             <div className="post-cta-actions">
 
-              <a href={`https://wa.me/5519999999999?text=Olá,%20li%20o%20artigo%20"${encodeURIComponent(post.title)}"%20e%20gostaria%20de%20falar%20com%20um%20curador.`}
+              <a href={`https://wa.me/5519971237841?text=Olá,%20li%20o%20artigo%20"${encodeURIComponent(post.title)}"%20e%20gostaria%20de%20falar%20com%20um%20curador.`}
                 target="_blank" rel="noopener noreferrer" className="btn btn-primary"
               >Falar no WhatsApp</a>
               <Link href="/" className="btn btn-secondary">Voltar para a Home</Link>
@@ -102,9 +103,15 @@ export default async function PostPage({ params }: PageProps) {
             <div className="post-side-block">
               <div className="post-side-label">Compartilhar</div>
               <div className="post-side-share">
-                <a href={`https://wa.me/?text=${encodeURIComponent(post.title + ' — ' + shareUrl)}`} target="_blank" rel="noopener noreferrer" className="post-share-btn" aria-label="WhatsApp">WA</a>
-                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="post-share-btn" aria-label="LinkedIn">in</a>
-                <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="post-share-btn" aria-label="X">✕</a>
+                <a href={`https://wa.me/?text=${encodeURIComponent(post.title + ' — ' + shareUrl)}`} target="_blank" rel="noopener noreferrer" className="post-share-btn" aria-label="WhatsApp">
+                  <MessageCircle size={15} />
+                </a>
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="post-share-btn" aria-label="LinkedIn">
+                  <Linkedin size={15} />
+                </a>
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="post-share-btn" aria-label="Facebook">
+                  <Facebook size={15} />
+                </a>
               </div>
             </div>
           </div>

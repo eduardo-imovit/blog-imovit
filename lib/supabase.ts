@@ -10,6 +10,10 @@ export const isSupabaseConfigured =
   supabaseAnonKey.trim() !== '' && 
   supabaseAnonKey !== 'your-supabase-anon-key';
 
+console.log('[Supabase Config] URL configurada:', !!supabaseUrl, 'URL length:', supabaseUrl.length);
+console.log('[Supabase Config] Key configurada:', !!supabaseAnonKey, 'Key length:', supabaseAnonKey.length);
+console.log('[Supabase Config] isSupabaseConfigured:', isSupabaseConfigured);
+
 // Instancia o cliente apenas se configurado para evitar erros de inicialização
 export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)
@@ -271,7 +275,7 @@ function adaptBlogPost(row: BlogPostRow): Post {
     } else {
       date = row.data_geracao;
     }
-  } catch (e) {
+  } catch {
     date = row.data_geracao;
   }
 
@@ -301,6 +305,7 @@ function adaptBlogPost(row: BlogPostRow): Post {
 
 // Funções para busca de posts (Supabase com fallback para Mock)
 export async function getPosts(): Promise<Post[]> {
+  console.log('[Supabase getPosts] Iniciando busca...');
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
@@ -309,13 +314,21 @@ export async function getPosts(): Promise<Post[]> {
         .eq('status', 'publicado')
         .order('data_geracao', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('[Supabase getPosts] Erro retornado pelo Supabase:', error);
+        throw error;
+      }
+      console.log('[Supabase getPosts] Resultados retornados:', data ? data.length : 0);
       if (data && data.length > 0) {
         return (data as BlogPostRow[]).map(adaptBlogPost);
+      } else {
+        console.warn('[Supabase getPosts] Tabela vazia ou sem posts com status "publicado".');
       }
     } catch (e) {
-      console.warn('Erro ao buscar posts do Supabase, utilizando mock data:', e);
+      console.error('[Supabase getPosts] Exceção capturada:', e);
     }
+  } else {
+    console.warn('[Supabase getPosts] Supabase não está configurado. Usando dados mockados.');
   }
 
   // Fallback padrão para mock
@@ -323,6 +336,7 @@ export async function getPosts(): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
+  console.log(`[Supabase getPostBySlug] Buscando slug: "${slug}"`);
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
@@ -332,13 +346,19 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
         .eq('status', 'publicado')
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error(`[Supabase getPostBySlug] Erro ao buscar slug "${slug}":`, error);
+        throw error;
+      }
+      console.log(`[Supabase getPostBySlug] Resultado para "${slug}":`, !!data);
       if (data) {
         return adaptBlogPost(data as BlogPostRow);
       }
     } catch (e) {
-      console.warn(`Erro ao buscar post por slug (${slug}) no Supabase, utilizando mock data:`, e);
+      console.error(`[Supabase getPostBySlug] Exceção ao buscar "${slug}":`, e);
     }
+  } else {
+    console.warn(`[Supabase getPostBySlug] Supabase não configurado para slug "${slug}". Usando fallback.`);
   }
 
   // Fallback padrão para mock
