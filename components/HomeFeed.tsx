@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import type { Post } from '@/lib/supabase';
+import NewsletterCTA from '@/components/NewsletterCTA';
 
 const THEMES = [
   { value: 'todos', label: 'Todos' },
@@ -57,6 +58,8 @@ export default function HomeFeed({ posts }: HomeFeedProps) {
           {midHighlights.map(p => <MidCard key={p.id} post={p} />)}
         </div>
       )}
+
+      <NewsletterCTA />
 
       {rest.length > 0 && (
         <>

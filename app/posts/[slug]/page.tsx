@@ -3,6 +3,7 @@ import { getPostBySlug } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import TocNav from '@/components/TocNav';
 import { MessageCircle, Linkedin, Facebook } from 'lucide-react';
+import NewsletterCTA from '@/components/NewsletterCTA';
 
 export const revalidate = 0;
 
@@ -69,6 +70,8 @@ export default async function PostPage({ params }: PageProps) {
       <div className="post-body">
         <div className="post-content-col">
           <div className="article-content" dangerouslySetInnerHTML={{ __html: processedHtml }} />
+
+          <NewsletterCTA origemSlug={post.slug} />
 
           <section className="post-cta">
             <h2 className="post-cta-title">Este artigo inspirou você?</h2>

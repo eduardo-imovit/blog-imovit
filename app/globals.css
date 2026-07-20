@@ -1254,3 +1254,155 @@
     display: none;
   }
 }
+
+/* ============================================================
+   NEWSLETTER — Bloco de Inscrição Boutique
+   ============================================================ */
+.newsletter-cta {
+  background: linear-gradient(135deg, #F5F0E8 0%, #EDE7D9 100%);
+  border: 1px solid rgba(232, 89, 60, 0.15);
+  border-radius: 8px;
+  padding: 40px;
+  margin: 48px 0;
+  text-align: left;
+  box-shadow: 0 1px 3px rgba(45, 45, 45, 0.03), 0 8px 24px rgba(45, 45, 45, 0.04);
+}
+
+.newsletter-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.newsletter-header {
+  margin-bottom: 24px;
+}
+
+.newsletter-title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 24px;
+  font-weight: 400;
+  color: #1F1F1F;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.newsletter-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666660;
+  margin: 0;
+  max-width: 680px;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.newsletter-inputs {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 12px 18px;
+  border-radius: 24px;
+  border: 1px solid #C9C6BE;
+  background: #FFFFFF;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 14px;
+  color: #2D2D2D;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.newsletter-input:focus {
+  border-color: var(--coral, #E8593C);
+  box-shadow: 0 0 0 3px rgba(232, 89, 60, 0.12);
+}
+
+.newsletter-input::placeholder {
+  color: #8A8A85;
+}
+
+.newsletter-submit {
+  flex-shrink: 0;
+  padding: 12px 28px;
+  font-size: 14px;
+  border-radius: 24px;
+  cursor: pointer;
+  background: var(--coral, #E8593C);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.newsletter-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.newsletter-error-message {
+  font-size: 13px;
+  color: #C4472F;
+  font-weight: 500;
+  margin-top: 4px;
+  padding-left: 4px;
+}
+
+.newsletter-success {
+  text-align: center;
+  padding: 20px 10px;
+  animation: scale-up 0.4s ease-out;
+}
+
+.newsletter-success-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(232, 89, 60, 0.1);
+  color: var(--coral, #E8593C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0 auto 16px;
+}
+
+@keyframes scale-up {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .newsletter-cta {
+    padding: 32px 24px;
+    margin: 32px 0;
+  }
+
+  .newsletter-inputs {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .newsletter-input {
+    width: 100%;
+  }
+
+  .newsletter-submit {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+  }
+}
